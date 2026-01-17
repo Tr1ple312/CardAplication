@@ -1,5 +1,5 @@
 import CenteredLayout from "../layouts/CenteredLayout";
-import WordCard from "./Components/MainPage";
+import WordCard from "./Components/CardComponent/";
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import darkTheme from "./themes/datkTheme";
 import AppBar from "./Components/AppBar"

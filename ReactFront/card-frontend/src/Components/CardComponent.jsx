@@ -54,26 +54,22 @@ export default function WordCard({ meaning, word }) {
 					alignItems: "center",
 					height: "100%",
 					textAlign: "center",
+					gap: 3
+	
 				}}
 			>
 				<Typography variant="h1">{meaning}</Typography>
 				<TextField
-					variant="outlined"
-					label="Enter translation"
+					variant="filled"
 					value={userAnswer}
 					onChange={handleUserAnswer}
 					onKeyDown={handleKeyDown}
 					autoFocus
-					InputProps= {{readOnly: isChecked}}
-					sx={{ width: '100%', maxWidth: 300 }}
-
+					autoComplete="off"
+					InputProps= {{readOnly: isChecked, sx: {fontSize:'1.5rem', lineHeight: '1.4', textAlign: 'center'}}}
 				/>
+				<Button variant="contained" size="large">See Translate</Button>
 			</CardContent>
-			<CardActions sx={{ justifyContent: "center" }}>
-				<Button size="large" sx={{ bgcolor: "#2f2f2f", color: "primary.main" }}>
-					Learn more
-				</Button>
-			</CardActions>
 		</Card>
   );
 }
