@@ -31,13 +31,17 @@ export default function WordCard({ meaning, word }) {
   function handleFlip() {
     setFlipped((prev) => !prev);
   }
-  
+
+  function handleNextCard() {
+    
+  }
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-	if (isChecked && isCorrect) {
-		handleFlip()
-	}
-  }, [isChecked, isCorrect])
+    if (isChecked && isCorrect) {
+      setFlipped(true);
+    }
+  }, [isChecked, isCorrect]);
 
   return (
     <Card
@@ -55,25 +59,28 @@ export default function WordCard({ meaning, word }) {
             ? "20px solid #6bcf92"
             : "20px solid #e06a6a"
           : "20px solid #595d78",
-        display: "flex",
-        flexDirection: "column",
       }}
     >
       <CardContent
         sx={{
-          flexGrow: 1,
+          height: "100%",
+          minHeight: 550,
+          width: "100%",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          height: "100%",
-          width: "100%",
+          padding: 0,
+          "&:last-child": {
+            paddingBottom: 0,
+          }
         }}
       >
+        {/* FLIP CONTAINER */}
         <Box
           sx={{
+            position: "relative",
             width: "100%",
             height: "100%",
-            position: "relative",
             transformStyle: "preserve-3d",
             transition: "transform 0.5s",
             transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
@@ -83,61 +90,117 @@ export default function WordCard({ meaning, word }) {
           <Box
             sx={{
               position: "absolute",
-              width: "100%",
-              height: "100%",
+              inset: 0,
               backfaceVisibility: "hidden",
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
-              gap: 3,
+              padding: 4,
+              gap: 3
             }}
           >
-            <Typography variant="h1">{meaning}</Typography>
-            <TextField
-              variant="filled"
-              value={userAnswer}
-              onChange={handleUserAnswer}
-              onKeyDown={handleKeyDown}
-              autoFocus
-              autoComplete="off"
-              InputProps={{
-                readOnly: isCorrect,
-                sx: {
-                  fontSize: "1.5rem",
-                  lineHeight: "1.4",
-                  textAlign: "center",
-                },
+            {/* CONTENT */}
+            <Box
+              sx={{
+                flexGrow: 1,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: 3,
               }}
-            />
-            <Button variant="contained" size="large" onClick={handleFlip}>
-              See Translate
-            </Button>
+            >
+              <Typography variant="h1" sx={{ textAlign: "center" }}>
+                {meaning}
+              </Typography>
+
+              <TextField
+                variant="filled"
+                value={userAnswer}
+                onChange={handleUserAnswer}
+                onKeyDown={handleKeyDown}
+                autoFocus
+                autoComplete="off"
+                InputProps={{
+                  readOnly: isCorrect,
+                  sx: {
+                    fontSize: "1.5rem",
+                    textAlign: "center",
+                  },
+                }}
+                sx={{
+                  "& .MuiInputBase-input": {
+                    textAlign: "center",
+                  }
+                }}
+              />
+            </Box>
+
+            {/* ACTIONS */}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                gap: 2,
+              }}
+            >
+              <Button variant="contained" size="large" onClick={handleFlip}>
+                See Translate
+              </Button>
+            </Box>
           </Box>
 
           {/* BACK SIDE */}
           <Box
             sx={{
               position: "absolute",
-              width: "100%",
-              height: "100%",
+              inset: 0,
               backfaceVisibility: "hidden",
               transform: "rotateY(180deg)",
               display: "flex",
-			  flexDirection: "column",
+              flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
-			  gap: 3
+              padding: 4,
+              gap: 3,
             }}
           >
-			<Typography variant="h1">{word}</Typography>
-			<Button variant="contained" size="large" onClick={handleFlip}>
-              See Translate
-            </Button>
+            {/* CONTENT */}
+            <Box
+              sx={{
+                flexGrow: 1,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Typography variant="h1" sx={{ textAlign: "center" }}>
+                {word}
+              </Typography>
+            </Box>
+
+            {/* ACTIONS */}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                gap: 2,
+              }}
+            >
+              <Button variant="contained" size="large" onClick={handleFlip}>
+                See Translate
+              </Button>
+
+              <Button variant="contained" size="large" onClick={handleNextCard}>
+                Next Card
+              </Button>
+            </Box>
           </Box>
         </Box>
       </CardContent>
     </Card>
   );
 }
+
 
