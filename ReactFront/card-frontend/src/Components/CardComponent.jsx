@@ -7,14 +7,18 @@ import {
   Box,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import { mocks } from "../api/mokcs";
 
-export default function WordCard({ meaning, word }) {
+export default function WordCard() {
   const [userAnswer, setUserAnswer] = useState("");
   const [isChecked, setIsChecked] = useState(false);
   const [flipped, setFlipped] = useState(false);
 
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const cardObj = mocks[currentIndex]
+
   const normalUserAnswer = userAnswer.trim().toLowerCase();
-  const normalCorrectAnswer = word.trim().toLowerCase();
+  const normalCorrectAnswer = cardObj.word.trim().toLowerCase();
   const isCorrect = normalUserAnswer === normalCorrectAnswer;
 
   function handleUserAnswer(e) {
@@ -33,7 +37,13 @@ export default function WordCard({ meaning, word }) {
   }
 
   function handleNextCard() {
-    
+    setFlipped(false)
+    setTimeout(() => {
+      setCurrentIndex(prev => (prev + 1) % mocks.length)
+      setUserAnswer("")
+      setIsChecked(false)
+
+      }, 250)
   }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -82,7 +92,7 @@ export default function WordCard({ meaning, word }) {
             width: "100%",
             height: "100%",
             transformStyle: "preserve-3d",
-            transition: "transform 0.5s",
+            transition: "transform 0.6s",
             transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
           }}
         >
@@ -112,7 +122,7 @@ export default function WordCard({ meaning, word }) {
               }}
             >
               <Typography variant="h1" sx={{ textAlign: "center" }}>
-                {meaning}
+                {cardObj.translate}
               </Typography>
 
               <TextField
@@ -176,7 +186,7 @@ export default function WordCard({ meaning, word }) {
               }}
             >
               <Typography variant="h1" sx={{ textAlign: "center" }}>
-                {word}
+                {cardObj.word}
               </Typography>
             </Box>
 
@@ -189,7 +199,7 @@ export default function WordCard({ meaning, word }) {
               }}
             >
               <Button variant="contained" size="large" onClick={handleFlip}>
-                See Translate
+                Back
               </Button>
 
               <Button variant="contained" size="large" onClick={handleNextCard}>
