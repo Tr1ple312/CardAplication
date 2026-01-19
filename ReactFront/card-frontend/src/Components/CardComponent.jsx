@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { mocks } from "../api/mokcs";
 
 export default function WordCard() {
+  
   const [userAnswer, setUserAnswer] = useState("");
   const [isChecked, setIsChecked] = useState(false);
   const [flipped, setFlipped] = useState(false);

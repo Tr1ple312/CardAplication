@@ -24,7 +24,7 @@ export const mocks = [
         id: 4,
         word: 'sand',
         translate: 'песок',
-        difficulty: 2, 
+        difficulty: 4, 
         create_time: new Date(),
     },
 
