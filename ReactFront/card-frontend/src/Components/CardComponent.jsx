@@ -26,16 +26,11 @@ export default function WordCard() {
     setIsChecked(false);
   }
 
-  function handleKeyDown(e) {
-    if (e.key === "Enter" && !isChecked && userAnswer.trim() !== "") {
-      setIsChecked(true);
-    }
-  }
-
   function handleFlip() {
     setFlipped((prev) => !prev);
   }
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   function handleNextCard() {
     setFlipped(false)
     setTimeout(() => {
@@ -45,6 +40,22 @@ export default function WordCard() {
 
       }, 250)
   }
+
+  useEffect(() => {
+    function handleGlobalKeyDown(e) {
+      if (e.key === "Enter" ) {
+        if(flipped === false) {
+          if(!isChecked && userAnswer.trim() !== "") {
+                setIsChecked(true) }
+        } else {
+          handleNextCard()
+        }
+      }
+    }
+
+    document.addEventListener('keydown', handleGlobalKeyDown)
+    return () =>  document.removeEventListener('keydown', handleGlobalKeyDown)
+  }, [flipped, isChecked, userAnswer, handleNextCard])
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
@@ -129,7 +140,6 @@ export default function WordCard() {
                 variant="filled"
                 value={userAnswer}
                 onChange={handleUserAnswer}
-                onKeyDown={handleKeyDown}
                 autoFocus
                 autoComplete="off"
                 InputProps={{
@@ -212,5 +222,4 @@ export default function WordCard() {
     </Card>
   );
 }
-
 
