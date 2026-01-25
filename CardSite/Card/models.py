@@ -13,11 +13,15 @@ class Card(models.Model):
         (5, 'very hard'),
     ]
 
-    english = models.CharField(max_length=100)
-    russian = models.CharField(max_length=100)
-    time_create = models.DateTimeField(auto_now_add=True)
-    difficulty = models.IntegerField(default=1, choices=DIFFICULTY_LEVELS)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    word = models.CharField(max_length=100, blank=False)
+    translate = models.CharField(max_length=100, blank=False)
+    time_create = models.DateTimeField(auto_now_add=True, db_index=True)
+    difficulty = models.IntegerField(default=1, choices=DIFFICULTY_LEVELS, db_index=True)
+    is_learned = models.BooleanField(default=False, db_index=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cards')
 
     def __str__(self):
-        return self.english
+        return self.word
+
+    class Meta:
+        ordering = ['-time_create']
