@@ -1,26 +1,39 @@
-import { Card, Box, Typography } from "@mui/material";
-import BoltIcon from '@mui/icons-material/Bolt';
+import { useEffect, useState } from 'react';
+import api from '../api/axiosConfig'
 
-export default function LightningTest({ word = "Hello", meaning = "Привет", difficulty = 5 }) {
-  const lightningColors = ["#4CAF50", "#FFEB3B", "#FF9800", "#F44336", "#9C27B0"];
+export default function LightningTest(){
 
-  const lightningIcons = Array.from({ length: difficulty }, (_, i) => (
-    <BoltIcon
-      key={i}
-      sx={{
-        color: lightningColors[difficulty - 1],
-        fontSize: "2rem",
-        mx: 0.25
-      }}
-    />
-  ));
+  const [card, setCard] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const Cardobj2 = card[currentIndex]
+
+  function handleNextObj() {
+    setCurrentIndex(prev => (prev + 1) % card.length)
+  }
+  
+  useEffect(() => {
+    api.get('/cards/')
+      .then(response => {
+        setCard(response.data)
+        console.log(response.data)
+      })
+      .catch(error => {
+        console.log('Error:', error);
+      })
+  }, [])
+
+  if (card.length === 0) {
+  return <div>Загрузка карточек...</div>
+  }
 
   return (
-    <Card sx={{ width: 300, minHeight: 200, borderRadius: 3, p: 2, textAlign: "center", bgcolor: "#323261", color: "#f8f8f2" }}>
-      <Box sx={{ mb: 2, display: "flex", justifyContent: "center" }}>{lightningIcons}</Box>
-      <Typography variant="h5" sx={{ mb: 1 }}>{word}</Typography>
-      <Typography variant="body1">{meaning}</Typography>
-    </Card>
+    <>
+      <p>{Cardobj2.word} </p>
+      <p>{Cardobj2.translate}</p>
+      <p>{Cardobj2.difficulty} </p>
+
+      <button onClick={handleNextObj}>Next word</button>
+    </>
   );
 }
 

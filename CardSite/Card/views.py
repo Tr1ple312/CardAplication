@@ -7,11 +7,11 @@ from .serializers import CardSerializer, UserRegistrationSerializer
 
 
 class CardViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
+    permission_classes = []
     serializer_class = CardSerializer
 
     def get_queryset(self):
-             return Card.objects.filter(user=self.request.user)
+             return Card.objects.all()
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
