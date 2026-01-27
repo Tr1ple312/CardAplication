@@ -1,13 +1,40 @@
-import { useState } from "react";
-import { mocks } from "../../api/mokcs";
+import { useState, useEffect } from "react";  
+import api from "../../api/axiosConfig";  
 import WordCard from "../CardComponent";
 
+
 export default function CardDeck() {
+    const [cards, setCards] = useState([]);  
+    const [loading, setLoading] = useState(true);  
     const [currentIndex, setCurrentIndex] = useState(0);
-    const currentCard = mocks[currentIndex]
+
+    // Добавь useEffect для загрузки
+    useEffect(() => {
+        api.get('/cards/')
+            .then(response => {
+                setCards(response.data);
+                setLoading(false);
+                console.log(response.data)
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                setLoading(false);
+            });
+    }, []);
+
+    // Добавь проверки
+    if (loading) {
+        return <div>Загрузка карточек...</div>
+    }
+
+    if (cards.length === 0) {
+        return <div>Нет карточек для изучения</div>
+    }
+
+    const currentCard = cards[currentIndex];  
 
     function handleNextIndex() {
-        setCurrentIndex(prev => (prev + 1) % mocks.length)
+        setCurrentIndex(prev => (prev + 1) % cards.length)  
     }
 
     return (

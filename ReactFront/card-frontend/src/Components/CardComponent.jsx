@@ -128,7 +128,7 @@ useEffect(() => {
               sx={BOX_STYLES.content}
             >
               <Typography variant="h1" sx={{ textAlign: "center" }}>
-                {word}
+                {translate}
               </Typography>
             </Box>
 
