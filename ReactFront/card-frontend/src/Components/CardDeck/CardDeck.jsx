@@ -8,7 +8,6 @@ export default function CardDeck() {
     const [loading, setLoading] = useState(true);  
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    // Добавь useEffect для загрузки
     useEffect(() => {
         api.get('/cards/')
             .then(response => {
@@ -22,7 +21,6 @@ export default function CardDeck() {
             });
     }, []);
 
-    // Добавь проверки
     if (loading) {
         return <div>Загрузка карточек...</div>
     }
