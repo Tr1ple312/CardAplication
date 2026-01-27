@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { mocks } from "../api/mokcs";
+import DifficultyIndicator from "./DifficultyComponent";
 
 export default function WordCard() {
   
@@ -83,6 +84,7 @@ export default function WordCard() {
           : "20px solid #595d78",
       }}
     >
+      <DifficultyIndicator level={cardObj.difficulty} />
       <CardContent
         sx={{
           height: "100%",

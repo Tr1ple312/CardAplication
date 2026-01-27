@@ -30,7 +30,7 @@ export default function DifficultyIndicator({ level }) {
           key={i}
           sx={{
             color: lightningColors[level - 1],
-            fontSize: "1.8rem",
+            fontSize: "5rem",
             mx: 0.25,
           }}
         />
