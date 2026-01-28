@@ -12,6 +12,8 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import logo from "../assets/logo.png";
+import { useAuth } from '../pages/context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 
 const pages = ['decks', 'learn']
@@ -19,6 +21,10 @@ const settings = ['Profile', 'Settings', 'Logout']
 
 function ResponsiveAppBar() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+
+
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -27,6 +33,15 @@ function ResponsiveAppBar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const handleMenuClick = (setting) => {
+    handleCloseUserMenu();
+
+    if (setting === 'Logout') {
+      logout()
+      navigate('/login')
+    }
+  }
 
 
  return (
@@ -74,7 +89,7 @@ function ResponsiveAppBar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem key={setting} onClick={() =>handleMenuClick(setting)}>
                   <Typography sx={{ textAlign: 'center', fontSize: '1.5rem' }}>{setting}</Typography>
                 </MenuItem>
               ))}
