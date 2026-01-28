@@ -28,9 +28,9 @@ export default function Register() {
         
         const result = await register(username, password, password_confirm, email);
         if (result.success) {
-        navigate('/login');  
+            navigate('/login');  
         } else {
-        setError('Error');
+            setError(Object.values(result.error)[0][0]);
         }
     };
 
