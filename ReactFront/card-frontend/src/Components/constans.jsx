@@ -81,6 +81,14 @@ export const BOX_STYLES = {
         display: "flex",
         justifyContent: "center",
         gap: 2,
-    }
+    },
 
+    login_register: {
+      maxWidth: 400, 
+      margin: '100px auto', 
+      padding: 3,
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 2
+    }
 };

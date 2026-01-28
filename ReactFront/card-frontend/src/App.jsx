@@ -6,6 +6,7 @@ import CenteredLayout from "../layouts/CenteredLayout";
 import CardDeck from "./Components/CardDeck/CardDeck";
 import LoginPage from "./pages/LoginPage";
 import { AuthProvider, useAuth } from './pages/context/AuthContext';
+import RegisterPage from "./pages/RegisterPage";
 
 function ProtectedRoute({ children }) {
   const { isAuthenticated } = useAuth();
@@ -30,15 +31,24 @@ function App() {
               <CenteredLayout>
                 <LoginPage />
               </CenteredLayout>
-            } />
-            
-            <Route path="/" element={
-              <ProtectedRoute>
-                <CenteredLayout>
-                  <CardDeck />
-                </CenteredLayout>
-              </ProtectedRoute>
-            } />
+            }
+          />
+
+          <Route path='/register' element={
+            <CenteredLayout>
+              <RegisterPage />
+            </CenteredLayout>
+          }
+          />
+      
+          <Route path="/" element={
+            <ProtectedRoute>
+              <CenteredLayout>
+                <CardDeck />
+              </CenteredLayout>
+            </ProtectedRoute>
+          }
+          />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

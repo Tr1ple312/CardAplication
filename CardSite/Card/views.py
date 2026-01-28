@@ -18,7 +18,7 @@ class CardViewSet(viewsets.ModelViewSet):
 
 
 class UserRegistrationView(generics.CreateAPIView):
-    permission_classes = [AllowAny]  # Доступно без авторизации
+    permission_classes = [AllowAny]
     serializer_class = UserRegistrationSerializer
 
     def create(self, request, *args, **kwargs):

@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import { Box, TextField, Button, Typography, Alert } from '@mui/material';
+import { BOX_STYLES } from '../Components/constans';
+import { Link } from 'react-router-dom';
+
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
@@ -25,14 +28,7 @@ export default function LoginPage() {
   };
 
   return (
-    <Box sx={{ 
-      maxWidth: 400, 
-      margin: '100px auto', 
-      padding: 3,
-      display: 'flex',
-      flexDirection: 'column',
-      gap: 2
-    }}>
+    <Box sx={BOX_STYLES.centerColumn}>
       <Typography variant="h4">Log in</Typography>
       
       {error && <Alert severity="error">{error}</Alert>}
@@ -64,6 +60,11 @@ export default function LoginPage() {
         >
           {loading ? 'Loading...' : 'Log in'}
         </Button>
+
+        <Typography sx={{ mt: 2, textAlign: 'center' }}>
+          Don't have an account?{' '}
+          <Link to="/register" style={{ color: '#7919d2' }}>Register</Link>
+        </Typography>
       </form>
     </Box>
   );

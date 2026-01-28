@@ -8,7 +8,7 @@ export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() =>{
     const token = localStorage.getItem('access_token');
     if (token) {
@@ -40,8 +40,20 @@ export function AuthProvider({ children }) {
     setIsAuthenticated(false);
   };
 
+  const register  = async(username, password, password_confirm, email ) => {
+    setLoading(true);
+    try {
+      const response = await api.post('/register/', {username, password, password_confirm, email});
+      setLoading(false);
+      return { success: true };
+    } catch (error) {
+      setLoading(false)
+      return{ success: false, error: error.response?.data}
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout, loading }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout, loading, register }}>
       {children}
     </AuthContext.Provider>
   );
