@@ -18,9 +18,9 @@ export default function LoginPage() {
     const result = await login(username, password);
     
     if (result.success) {
-      navigate('/');  // перенаправляем на главную
+      navigate('/');  
     } else {
-      setError('Неверный логин или пароль');
+      setError('Incorrect password or login');
     }
   };
 
@@ -62,7 +62,7 @@ export default function LoginPage() {
           disabled={loading}
           sx={{ mt: 2 }}
         >
-          {loading ? 'Log in...' : 'Log in'}
+          {loading ? 'Loading...' : 'Log in'}
         </Button>
       </form>
     </Box>

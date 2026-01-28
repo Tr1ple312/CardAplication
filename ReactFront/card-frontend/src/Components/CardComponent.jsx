@@ -48,7 +48,7 @@ export default function WordCard({ word, translate, difficulty, onNext }) {
   }, [flipped, isChecked, userAnswer, onNext, checkAnswer])
 
 useEffect(() => {
-    resetAnswer();  // сбрасываем ответ при смене карточки
+    resetAnswer();  
   }, [word, translate, resetAnswer]);
 
 

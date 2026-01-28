@@ -16,10 +16,10 @@ export default function useCardFlip(isChecked, isCorrect, word, translate) {
 
 
   useEffect(() => {
-    setFlipped(false);  // сбрасываем только флип
-  }, [word, translate]);  // ← убрали resetAnswer
+    setFlipped(false);  
+  }, [word, translate]);  
   
-  return {  // ← НЕ ЗАБУДЬ return!
+  return { 
     flipped,
     handleFlip
   };

@@ -1,11 +1,21 @@
 import { createContext, useState, useContext } from 'react';
 import api from '../../api/axiosConfig';
+import { useEffect } from 'react';
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [loading, setLoading] = useState(false);
+
+  
+  useEffect(() =>{
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      setIsAuthenticated(true);
+    }
+    setLoading(false)
+  }, [])
 
   const login = async (username, password) => {
     setLoading(true);

@@ -7,7 +7,6 @@ import CardDeck from "./Components/CardDeck/CardDeck";
 import LoginPage from "./pages/LoginPage";
 import { AuthProvider, useAuth } from './pages/context/AuthContext';
 
-// Защищённый роут
 function ProtectedRoute({ children }) {
   const { isAuthenticated } = useAuth();
   
@@ -20,10 +19,10 @@ function ProtectedRoute({ children }) {
 
 function App() {
   return (
-    <ThemeProvider theme={darkTheme}>
-      <CssBaseline />
-      <BrowserRouter>  {/* ← ПЕРЕСТАВЬ СЮДА */}
-        <AuthProvider>  {/* ← А ЭТО СЮДА */}
+    <AuthProvider>  
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <BrowserRouter>  
           <AppBar />
           
           <Routes>
@@ -41,9 +40,9 @@ function App() {
               </ProtectedRoute>
             } />
           </Routes>
-        </AuthProvider>
-      </BrowserRouter>
-    </ThemeProvider>
+        </BrowserRouter>
+      </ThemeProvider>
+    </AuthProvider>
   );
 }
 

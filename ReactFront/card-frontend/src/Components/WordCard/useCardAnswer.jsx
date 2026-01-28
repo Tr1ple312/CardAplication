@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";  // добавь useCallback
+import { useState, useCallback } from "react"; 
 
 export default function useCardAnswer(correctAnswer) {
   const [userAnswer, setUserAnswer] = useState("");
@@ -8,18 +8,18 @@ export default function useCardAnswer(correctAnswer) {
   const normalCorrectAnswer = correctAnswer.trim().toLowerCase();  
   const isCorrect = normalUserAnswer === normalCorrectAnswer;
   
-  const handleChange = useCallback((e) => {  // оберни в useCallback
+  const handleChange = useCallback((e) => { 
     setUserAnswer(e.target.value);
     setIsChecked(false);
   }, []);
 
-  const checkAnswer = useCallback(() => {  // оберни в useCallback
+  const checkAnswer = useCallback(() => {  
     if (userAnswer.trim() !== "") {
       setIsChecked(true);
     }
   }, [userAnswer]);
 
-  const resetAnswer = useCallback(() => {  // оберни в useCallback
+  const resetAnswer = useCallback(() => {  
     setUserAnswer("");
     setIsChecked(false);
   }, []);
