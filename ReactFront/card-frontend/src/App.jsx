@@ -7,6 +7,8 @@ import CardDeck from "./Components/CardDeck/CardDeck";
 import LoginPage from "./pages/LoginPage";
 import { AuthProvider, useAuth } from './pages/context/AuthContext';
 import RegisterPage from "./pages/RegisterPage";
+import DeckView from "./Components/MainPages/DeckViewPage"
+import FullPageLayout from '../layouts/FullPageLayout';
 
 function ProtectedRoute({ children }) {
   const { isAuthenticated } = useAuth();
@@ -41,7 +43,7 @@ function App() {
           }
           />
       
-          <Route path="/" element={
+          <Route path="/decks/:deckId/learn" element={
             <ProtectedRoute>
               <CenteredLayout>
                 <CardDeck />
@@ -49,6 +51,16 @@ function App() {
             </ProtectedRoute>
           }
           />
+
+          <Route path="/" element={
+            <ProtectedRoute>
+              <FullPageLayout>
+                <DeckView />
+              </FullPageLayout>
+            </ProtectedRoute>
+          }
+          />
+          
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
