@@ -2,16 +2,32 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import generics, viewsets, status
 from rest_framework.response import Response
 
-from .models import Card
-from .serializers import CardSerializer, UserRegistrationSerializer
+from .models import Card, Deck
+from .serializers import CardSerializer, UserRegistrationSerializer, DeckSerializer, DeckDetailSerializer
 
 
 class CardViewSet(viewsets.ModelViewSet):
-    permission_classes = []
+    permission_classes = [IsAuthenticated]
     serializer_class = CardSerializer
 
     def get_queryset(self):
-             return Card.objects.all()
+             return Card.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+class DeckViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    serializer_class = DeckSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return DeckDetailSerializer
+        return DeckSerializer
+
+    def get_queryset(self):
+        return Deck.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
