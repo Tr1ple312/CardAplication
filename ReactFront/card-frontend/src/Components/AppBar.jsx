@@ -37,10 +37,9 @@ function ResponsiveAppBar({ isDarkMode, toggleTheme }) {
 
   const handleThemeToggle = () => {
   toggleTheme();
-    // TODO: здесь нужно будет подключить переключение темы через ThemeProvider
   };
 
-  const handlePageClick = (page) => {
+  const handlePageClick = () => {
     navigate(`/`);
   };
 
