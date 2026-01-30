@@ -11,8 +11,13 @@ import DifficultyIndicator from "./DifficultIndicator/DifficultyComponent";
 import useCardAnswer from "./WordCard/useCardAnswer";
 import { BOX_STYLES, COLORS, CARD_STYLES } from "./constans";
 import useCardFlip from "./WordCard/useCardFlip";
+import { useTheme } from "@mui/material/styles";
+
 
 export default function WordCard({ word, translate, difficulty, onNext }) {
+
+  const theme = useTheme();
+
 
   const {
     userAnswer,
@@ -26,8 +31,10 @@ export default function WordCard({ word, translate, difficulty, onNext }) {
 
 
   const getBorderColor = () => {
-    if (!isChecked) return COLORS.borderDefault;
-    return isCorrect ? COLORS.borderCorrect : COLORS.borderIncorrect;
+    if (!isChecked) return theme.palette.divider;
+    return isCorrect
+      ? theme.palette.success.main
+      : theme.palette.error.main;
   };
 
 
@@ -57,8 +64,8 @@ useEffect(() => {
     <Card
       sx={{
         ...CARD_STYLES.card,
-        bgcolor: COLORS.cardBackground,
-        color: COLORS.cardText,
+        bgcolor: theme.palette.background.paper,
+        color: theme.palette.text.primary,
         border: `20px solid ${getBorderColor()}`
       }}
     >

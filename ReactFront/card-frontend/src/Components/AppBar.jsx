@@ -13,11 +13,11 @@ import logo from "../assets/logo.png";
 import { useAuth } from '../pages/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
+
 const pages = ['decks'];
 
-function ResponsiveAppBar() {
+function ResponsiveAppBar({ isDarkMode, toggleTheme }) {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [isDarkMode, setIsDarkMode] = React.useState(true);
   const navigate = useNavigate();
   const { logout, username, isAuthenticated } = useAuth();
 
@@ -36,7 +36,7 @@ function ResponsiveAppBar() {
   };
 
   const handleThemeToggle = () => {
-    setIsDarkMode(!isDarkMode);
+  toggleTheme();
     // TODO: здесь нужно будет подключить переключение темы через ThemeProvider
   };
 
