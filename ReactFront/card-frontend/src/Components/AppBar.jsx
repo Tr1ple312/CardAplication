@@ -6,25 +6,20 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
+import { Brightness4, Brightness7 } from '@mui/icons-material';
 import logo from "../assets/logo.png";
 import { useAuth } from '../pages/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
-
-const pages = ['decks', 'learn']
-const settings = ['Profile', 'Settings', 'Logout']
+const pages = ['decks'];
 
 function ResponsiveAppBar() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [isDarkMode, setIsDarkMode] = React.useState(true);
   const navigate = useNavigate();
-  const { logout } = useAuth();
-
-
+  const { logout, username, isAuthenticated } = useAuth();
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -34,66 +29,111 @@ function ResponsiveAppBar() {
     setAnchorElUser(null);
   };
 
-  const handleMenuClick = (setting) => {
+  const handleLogout = () => {
     handleCloseUserMenu();
+    logout();
+    navigate('/login');
+  };
 
-    if (setting === 'Logout') {
-      logout()
-      navigate('/login')
-    }
-  }
+  const handleThemeToggle = () => {
+    setIsDarkMode(!isDarkMode);
+    // TODO: здесь нужно будет подключить переключение темы через ThemeProvider
+  };
 
+  const handlePageClick = (page) => {
+    navigate(`/`);
+  };
 
- return (
+  return (
     <AppBar position="static">
       <Container maxWidth="false">
         <Toolbar disableGutters>
-          <img src={logo} style={{ height: 75, filter: 'invert(1)' }} />
+          <img 
+            src={logo} 
+            style={{ height: 75, filter: 'invert(1)', cursor: 'pointer' }} 
+            onClick={() => navigate('/')}
+          />
 
           {/* Меню для десктопа */}
           <Box sx={{ flexGrow: 1, display: 'flex', ml: 2 }}>
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={handleCloseUserMenu}
-                sx={{ my: 3, color: 'white', display: 'block', fontSize: '1.5rem'}}
+                onClick={() => handlePageClick(page)}
+                sx={{ my: 3, color: 'white', display: 'block', fontSize: '1.5rem' }}
               >
                 {page}
               </Button>
             ))}
           </Box>
 
-
-
-          {/* Аватар пользователя */}
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
+          {/* Иконка переключения темы */}
+          <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center', gap: 2 }}>
+            <IconButton 
+              onClick={handleThemeToggle} 
+              sx={{ color: 'white' }}
+              size="large"
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={() =>handleMenuClick(setting)}>
-                  <Typography sx={{ textAlign: 'center', fontSize: '1.5rem' }}>{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
+              {isDarkMode ? <Brightness7 /> : <Brightness4 />}
+            </IconButton>
+
+            {/* Условный рендеринг: username или кнопка регистрации */}
+            {isAuthenticated ? (
+              <>
+                <Button
+                  onClick={handleOpenUserMenu}
+                  sx={{ 
+                    color: 'white', 
+                    fontSize: '1.3rem',
+                    textTransform: 'none',
+                    '&:hover': {
+                      backgroundColor: 'rgba(255, 255, 255, 0.1)'
+                    }
+                  }}
+                >
+                  {username}
+                </Button>
+
+                <Menu
+                  sx={{ mt: '45px' }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  <MenuItem onClick={handleLogout}>
+                    <Typography sx={{ textAlign: 'center', fontSize: '1.3rem' }}>
+                      Logout
+                    </Typography>
+                  </MenuItem>
+                </Menu>
+              </>
+            ) : (
+              <Button
+                variant="outlined"
+                onClick={() => navigate('/register')}
+                sx={{ 
+                  color: 'white',
+                  borderColor: 'white',
+                  fontSize: '1.2rem',
+                  '&:hover': {
+                    borderColor: 'white',
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)'
+                  }
+                }}
+              >
+                Register
+              </Button>
+            )}
           </Box>
         </Toolbar>
       </Container>
