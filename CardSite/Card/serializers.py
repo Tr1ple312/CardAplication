@@ -29,7 +29,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 class CardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Card
-        fields = ['word', 'translate', 'difficulty', 'is_learned', 'time_create', 'id']
+        fields = ['word', 'translate', 'difficulty', 'is_learned', 'time_create', 'id', 'deck']
         read_only_fields = ['id', 'time_create']
 
 
