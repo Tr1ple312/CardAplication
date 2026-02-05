@@ -6,18 +6,19 @@ import {
   TextField,
   Box,
 } from "@mui/material";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import DifficultyIndicator from "./DifficultIndicator/DifficultyComponent";
 import useCardAnswer from "./WordCard/useCardAnswer";
-import { BOX_STYLES, COLORS, CARD_STYLES } from "./constans";
+import { BOX_STYLES, CARD_STYLES } from "./constans";
 import useCardFlip from "./WordCard/useCardFlip";
 import { useTheme } from "@mui/material/styles";
 
-
 export default function WordCard({ word, translate, difficulty, onNext }) {
-
   const theme = useTheme();
+  const navigate = useNavigate();
 
+  const [cardFlipped, setCardFlipped] = useState(false);
 
   const {
     userAnswer,
@@ -26,9 +27,9 @@ export default function WordCard({ word, translate, difficulty, onNext }) {
     handleChange,
     checkAnswer,
     resetAnswer
-  } = useCardAnswer(word)
-  const { flipped, handleFlip } = useCardFlip(isChecked, isCorrect, word, translate);  
+  } = useCardAnswer(word);
 
+  const { flipped, handleFlip } = useCardFlip(isChecked, isCorrect, word, translate);
 
   const getBorderColor = () => {
     if (!isChecked) return theme.palette.divider;
@@ -37,28 +38,34 @@ export default function WordCard({ word, translate, difficulty, onNext }) {
       : theme.palette.error.main;
   };
 
+  function handleNextWithAnimation() {
+    setCardFlipped(true);
+    setTimeout(() => {
+      onNext();
+      setCardFlipped(false);
+    }, 380);
+  }
 
   useEffect(() => {
     function handleGlobalKeyDown(e) {
-      if (e.key === "Enter" ) {
-        if(flipped === false) {
-          if(!isChecked && userAnswer.trim() !== "") {
-                checkAnswer() }
+      if (e.key === "Enter") {
+        if (flipped === false) {
+          if (!isChecked && userAnswer.trim() !== "") {
+            checkAnswer();
+          }
         } else {
-          onNext()
+          handleNextWithAnimation();
         }
       }
     }
 
-    document.addEventListener('keydown', handleGlobalKeyDown)
-    return () =>  document.removeEventListener('keydown', handleGlobalKeyDown)
-  }, [flipped, isChecked, userAnswer, onNext, checkAnswer])
+    document.addEventListener('keydown', handleGlobalKeyDown);
+    return () => document.removeEventListener('keydown', handleGlobalKeyDown);
+  }, [flipped, isChecked, userAnswer, checkAnswer]);
 
-useEffect(() => {
-    resetAnswer();  
+  useEffect(() => {
+    resetAnswer();
   }, [word, translate, resetAnswer]);
-
-
 
   return (
     <Card
@@ -66,14 +73,15 @@ useEffect(() => {
         ...CARD_STYLES.card,
         bgcolor: theme.palette.background.paper,
         color: theme.palette.text.primary,
-        border: `20px solid ${getBorderColor()}`
+        border: `20px solid ${getBorderColor()}`,
+        transform: cardFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
+        transition: "transform 0.6s",
+        transformStyle: "preserve-3d",
       }}
     >
       <DifficultyIndicator level={difficulty} />
-      <CardContent
-        sx={CARD_STYLES.cardContent}
-      >
-        {/* FLIP CONTAINER */}
+      <CardContent sx={CARD_STYLES.cardContent}>
+        {/* FLIP CONTAINER - Анимация А */}
         <Box
           sx={{
             ...BOX_STYLES.flipContainer,
@@ -81,13 +89,8 @@ useEffect(() => {
           }}
         >
           {/* FRONT SIDE */}
-          <Box
-            sx={BOX_STYLES.cardSide}
-          >
-            {/* CONTENT */}
-            <Box
-              sx={BOX_STYLES.content}
-            >
+          <Box sx={BOX_STYLES.cardSide}>
+            <Box sx={BOX_STYLES.content}>
               <Typography variant="h1" sx={{ textAlign: "center" }}>
                 {translate}
               </Typography>
@@ -113,10 +116,7 @@ useEffect(() => {
               />
             </Box>
 
-            {/* ACTIONS */}
-            <Box
-              sx={BOX_STYLES.actions}
-            >
+            <Box sx={BOX_STYLES.actions}>
               <Button variant="contained" size="large" onClick={handleFlip}>
                 See Translate
               </Button>
@@ -130,28 +130,39 @@ useEffect(() => {
               transform: "rotateY(180deg)",
             }}
           >
-            {/* CONTENT */}
-            <Box
-              sx={BOX_STYLES.content}
-            >
+            <Box sx={BOX_STYLES.content}>
               <Typography variant="h1" sx={{ textAlign: "center" }}>
                 {translate}
               </Typography>
             </Box>
 
-            {/* ACTIONS */}
-            <Box
-              sx={BOX_STYLES.actions}
-            >
+            <Box sx={BOX_STYLES.actions}>
               <Button variant="contained" size="large" onClick={handleFlip}>
                 Back
               </Button>
 
-              <Button variant="contained" size="large" onClick={onNext}>
+              <Button variant="contained" size="large" onClick={handleNextWithAnimation}>
                 Next Card
               </Button>
             </Box>
           </Box>
+        </Box>
+
+        {/* КНОПКА "SEE ALL DECKS" ВНЕ FLIP CONTAINER */}
+        <Box
+          sx={{
+            position: "absolute",
+            bottom: 5,
+            left: 20,
+            zIndex: 10,
+          }}
+        >
+          <Button
+            variant="text"
+            onClick={() => navigate('/')}
+          >
+            See All Decks
+          </Button>
         </Box>
       </CardContent>
     </Card>

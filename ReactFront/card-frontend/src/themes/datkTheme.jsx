@@ -3,20 +3,20 @@ import CssBaseline from '@mui/material/CssBaseline';
 
 const darkTheme = createTheme({
   palette: {
-    mode: 'dark',  // это ключевой момент!
+    mode: 'dark', 
     primary: {
-      main: '#6272a4',   // основной цвет
+      main: '#6272a4',  
     },
     secondary: {
-      main: '#50fa7b',   // дополнительный цвет
+      main: '#50fa7b',   
     },
     background: {
-      default: '#1e1e2f', // фон страницы
-      paper: '#323261',   // фон карточек
+      default: '#1e1e2f', 
+      paper: '#323261',   
     },
     text: {
-      primary: '#f8f8f2', // основной текст
-      secondary: '#bd93f9', // дополнительный
+      primary: '#f8f8f2', 
+      secondary: '#bd93f9', 
     },
   },
   typography: {

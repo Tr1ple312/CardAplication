@@ -18,6 +18,7 @@ export const SIZES = {
 
 export const CARD_STYLES = {
   card: {
+    position: 'relative',
     width: { xs: "90%", sm: 800 },
     maxWidth: 1000,
     minHeight: 650,
@@ -27,6 +28,7 @@ export const CARD_STYLES = {
   },
 
   cardContent: {
+    position: 'relative',
     height: "100%",
     minHeight: 550,
     width: "100%",

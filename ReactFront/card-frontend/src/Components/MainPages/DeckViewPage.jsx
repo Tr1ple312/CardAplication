@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Box, Typography, Button, Card, CardContent, Chip, CircularProgress, IconButton,
-  Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem
+  Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem, Collapse
 } from '@mui/material';
-import { Edit, Delete, Add } from '@mui/icons-material';
+import { Edit, Delete, Add, ExpandMore, School } from '@mui/icons-material';
 import api from '../../api/axiosConfig';
 
 export default function DeckView() {
@@ -18,9 +18,13 @@ export default function DeckView() {
   const [sortBy, setSortBy] = useState('time');
   const [filterDifficulty, setFilterDifficulty] = useState('all');
   
-  // Для создания колоды
+  // Для колод
   const [deckDialogOpen, setDeckDialogOpen] = useState(false);
+  const [editingDeck, setEditingDeck] = useState(null);
   const [deckForm, setDeckForm] = useState({ name: '', description: '' });
+  
+  // Для показа описания в заголовке
+  const [showDescription, setShowDescription] = useState(false);
   
   const navigate = useNavigate();
 
@@ -43,14 +47,15 @@ export default function DeckView() {
     try {
       const res = await api.get(`/decks/${deckId}/`);
       setCards(res.data.cards || []);
+      setSelectedDeck(res.data);
     } catch (err) {
       console.error(err);
     }
   }
 
   function handleDeckClick(deck) {
-    setSelectedDeck(deck);
     loadCards(deck.id);
+    setShowDescription(false);
   }
 
   async function handleDeleteDeck(e, deckId) {
@@ -67,6 +72,18 @@ export default function DeckView() {
     } catch (err) {
       console.error(err);
     }
+  }
+
+  function handleEditDeck(e, deck) {
+    e.stopPropagation();
+    setEditingDeck(deck);
+    setDeckForm({ name: deck.name, description: deck.description || '' });
+    setDeckDialogOpen(true);
+  }
+
+  function handleStudyDeck(e, deckId) {
+    e.stopPropagation();
+    navigate(`/decks/${deckId}/learn`);
   }
 
   async function handleDeleteCard(cardId) {
@@ -116,14 +133,15 @@ export default function DeckView() {
     }
   }
 
-  // Функции для создания колоды
   function openDeckDialog() {
+    setEditingDeck(null);
     setDeckForm({ name: '', description: '' });
     setDeckDialogOpen(true);
   }
 
   function closeDeckDialog() {
     setDeckDialogOpen(false);
+    setEditingDeck(null);
     setDeckForm({ name: '', description: '' });
   }
 
@@ -134,12 +152,19 @@ export default function DeckView() {
     }
 
     try {
-      await api.post('/decks/', deckForm);
+      if (editingDeck) {
+        await api.patch(`/decks/${editingDeck.id}/`, deckForm);
+        if (selectedDeck?.id === editingDeck.id) {
+          await loadCards(editingDeck.id);
+        }
+      } else {
+        await api.post('/decks/', deckForm);
+      }
       closeDeckDialog();
       await loadDecks();
     } catch (err) {
       console.error(err);
-      alert('Failed to create deck');
+      alert('Failed to save deck');
     }
   }
 
@@ -179,7 +204,7 @@ export default function DeckView() {
         <Box sx={{ width: 400, borderRight: '2px solid rgba(255,255,255,0.12)', overflowY: 'auto', p: 3 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
             <Typography variant="h4">My Decks</Typography>
-            <Button variant="contained" onClick={openDeckDialog}>+ New</Button>
+            <Button variant="contained" onClick={openDeckDialog}>Create new</Button>
           </Box>
 
           {decks.length === 0 ? (
@@ -206,8 +231,16 @@ export default function DeckView() {
                     <Typography variant="h6">{deck.name}</Typography>
                     <Typography variant="body2" color="text.secondary">{deck.cards_count} words</Typography>
                   </Box>
-                  <Box>
-                    <IconButton size="small" onClick={(e) => { e.stopPropagation(); navigate(`/decks/${deck.id}/edit`); }}>
+                  <Box sx={{ display: 'flex', gap: 0.5 }}>
+                    <IconButton 
+                      size="small" 
+                      color="primary"
+                      onClick={(e) => handleStudyDeck(e, deck.id)}
+                      disabled={deck.cards_count === 0}
+                    >
+                      <School />
+                    </IconButton>
+                    <IconButton size="small" onClick={(e) => handleEditDeck(e, deck)}>
                       <Edit />
                     </IconButton>
                     <IconButton size="small" color="error" onClick={(e) => handleDeleteDeck(e, deck.id)}>
@@ -229,10 +262,47 @@ export default function DeckView() {
           ) : (
             <>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-                <Box>
-                  <Typography variant="h3">{selectedDeck.name}</Typography>
+                <Box sx={{ flex: 1 }}>
+                  {/* Название и треугольник */}
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Typography variant="h3">{selectedDeck.name}</Typography>
+                    {selectedDeck.description && (
+                      <IconButton 
+                        size="small"
+                        onClick={() => setShowDescription(!showDescription)}
+                        sx={{ 
+                          transform: showDescription ? 'rotate(180deg)' : 'rotate(0deg)',
+                          transition: 'transform 0.3s'
+                        }}
+                      >
+                        <ExpandMore />
+                      </IconButton>
+                    )}
+                  </Box>
+                  
                   <Typography variant="body1" color="text.secondary">{filteredCards.length} of {cards.length} words</Typography>
+                  
+                  {/* Всплывающее описание */}
+                  {selectedDeck.description && (
+                    <Collapse in={showDescription}>
+                      <Typography 
+                        variant="body2" 
+                        color="text.secondary" 
+                        sx={{ 
+                          mt: 2, 
+                          p: 2, 
+                          bgcolor: 'action.hover',
+                          borderRadius: 1,
+                          borderLeft: '4px solid',
+                          borderColor: 'primary.main'
+                        }}
+                      >
+                        {selectedDeck.description}
+                      </Typography>
+                    </Collapse>
+                  )}
                 </Box>
+                
                 <Box sx={{ display: 'flex', gap: 2 }}>
                   <Button variant="outlined" startIcon={<Add />} onClick={() => openDialog()}>Add</Button>
                   <Button variant="contained" onClick={() => navigate(`/decks/${selectedDeck.id}/learn`)} disabled={cards.length === 0}>
@@ -343,7 +413,7 @@ export default function DeckView() {
 
       {/* Deck Dialog */}
       <Dialog open={deckDialogOpen} onClose={closeDeckDialog} maxWidth="sm" fullWidth>
-        <DialogTitle>Create New Deck</DialogTitle>
+        <DialogTitle>{editingDeck ? 'Edit Deck' : 'Create New Deck'}</DialogTitle>
         <DialogContent>
           <TextField
             fullWidth
@@ -364,7 +434,9 @@ export default function DeckView() {
         </DialogContent>
         <DialogActions>
           <Button onClick={closeDeckDialog}>Cancel</Button>
-          <Button variant="contained" onClick={handleSaveDeck}>Create</Button>
+          <Button variant="contained" onClick={handleSaveDeck}>
+            {editingDeck ? 'Save' : 'Create'}
+          </Button>
         </DialogActions>
       </Dialog>
     </>
