@@ -131,7 +131,7 @@ Aplikacja posiada następujące funkcjonalności spełniające wymagania projekt
 
 ### Krok 1: Klonowanie repozytorium
 ```bash
-git clone [URL_REPOZYTORIUM]
+git clone https://github.com/Tr1ple312/CardAplication
 cd EngCardPythonBack
 ```
 
