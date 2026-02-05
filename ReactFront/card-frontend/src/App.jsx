@@ -13,7 +13,11 @@ import FullPageLayout from '../layouts/FullPageLayout';
 import { useState } from 'react';
 
 function ProtectedRoute({ children }) {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, loading } = useAuth();
+  
+  if (loading) {
+    return <div>Loading...</div>; 
+  }
   
   if (!isAuthenticated) {
     return <Navigate to="/login" />;
@@ -82,10 +86,6 @@ export default App;
 
 
 // TODO: анимация перворачивания карточки
-
-// TODO: страница добавления карточек и создания колод
-
-// TODO: 3 docker контейнера 
 
 // TODO: фикс бага с обработчиком ENTER (если посмотреть перевод до  проверки слова и нажать ENTER карточка не переворачивается)
 

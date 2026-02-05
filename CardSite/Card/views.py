@@ -11,7 +11,13 @@ class CardViewSet(viewsets.ModelViewSet):
     serializer_class = CardSerializer
 
     def get_queryset(self):
-             return Card.objects.filter(user=self.request.user)
+        queryset = Card.objects.filter(user=self.request.user)
+
+        deck_id = self.request.query_params.get('deck')
+        if deck_id:
+            queryset = queryset.filter(deck_id=deck_id)
+
+        return queryset
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)

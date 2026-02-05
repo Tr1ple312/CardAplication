@@ -159,7 +159,12 @@ Pierwsze uruchomienie może potrwać kilka minut ze względu na pobieranie obraz
 Po pomyślnym uruchomieniu aplikacja będzie dostępna pod następującymi adresami:
 
 - **Frontend:** http://localhost:3000
-- **Backend API:** http://localhost:8000/api/v1/
+
+**Przykładowe endpointy API:**
+- http://localhost:8000/api/v1/cards/ (lista fiszek)
+- http://localhost:8000/api/v1/decks/ (lista talii)
+- http://localhost:8000/api/v1/register/ (rejestracja)
+
 - **Admin Panel Django:** http://localhost:8000/admin/
 
 ### Pierwsza konfiguracja
