@@ -11,7 +11,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-8fs)3emcb)b1o*$c(vfl+d&pl7d2+*^p+8(-jj+$&$73oax_ss'
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'backend', '*'] 
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "http://frontend",
+    "http://frontend:80",
+]
 
 INSTALLED_APPS = [
     'corsheaders',
@@ -68,11 +75,11 @@ WSGI_APPLICATION = 'CardSite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'card_db',
-        'USER': 'card_user',
-        'PASSWORD': 'wog11235813',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': os.getenv('POSTGRES_DB', 'card_db'),
+        'USER': os.getenv('POSTGRES_USER', 'card_user'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'wog11235813'),
+        'HOST': os.getenv('POSTGRES_HOST', 'localhost'),  # 'db' в Docker, 'localhost' локально
+        'PORT': os.getenv('POSTGRES_PORT', '5432'),
         'OPTIONS': {
             'options': '-c client_encoding=UTF8',
         },
@@ -109,6 +116,7 @@ USE_TZ = True
 
 # Static files
 STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
