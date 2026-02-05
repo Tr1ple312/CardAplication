@@ -53,7 +53,6 @@ function ResponsiveAppBar({ isDarkMode, toggleTheme }) {
             onClick={() => navigate('/')}
           />
 
-          {/* Меню для десктопа */}
           <Box sx={{ flexGrow: 1, display: 'flex', ml: 2 }}>
             {pages.map((page) => (
               <Button
@@ -66,7 +65,6 @@ function ResponsiveAppBar({ isDarkMode, toggleTheme }) {
             ))}
           </Box>
 
-          {/* Иконка переключения темы */}
           <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center', gap: 2 }}>
             <IconButton 
               onClick={handleThemeToggle} 
@@ -76,7 +74,6 @@ function ResponsiveAppBar({ isDarkMode, toggleTheme }) {
               {isDarkMode ? <Brightness7 /> : <Brightness4 />}
             </IconButton>
 
-            {/* Условный рендеринг: username или кнопка регистрации */}
             {isAuthenticated ? (
               <>
                 <Button

@@ -81,7 +81,6 @@ export default function WordCard({ word, translate, difficulty, onNext }) {
     >
       <DifficultyIndicator level={difficulty} />
       <CardContent sx={CARD_STYLES.cardContent}>
-        {/* FLIP CONTAINER - Анимация А */}
         <Box
           sx={{
             ...BOX_STYLES.flipContainer,
@@ -148,7 +147,7 @@ export default function WordCard({ word, translate, difficulty, onNext }) {
           </Box>
         </Box>
 
-        {/* КНОПКА "SEE ALL DECKS" ВНЕ FLIP CONTAINER */}
+        {/* "SEE ALL DECKS" ВНЕ FLIP CONTAINER */}
         <Box
           sx={{
             position: "absolute",

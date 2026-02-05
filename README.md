@@ -5,7 +5,7 @@ Aplikacja webowa do nauki języków obcych za pomocą fiszek. Projekt został zr
 ## Informacje o projekcie
 
 **Uczestnicy:**
-- [Andrii Shkolyk] - [55669]
+- Andrii Shkolyk - nr indexu: 55669
 
 **Data:** Luty 2026
 

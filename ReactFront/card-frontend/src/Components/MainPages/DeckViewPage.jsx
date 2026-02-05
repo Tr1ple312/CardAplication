@@ -18,12 +18,10 @@ export default function DeckView() {
   const [sortBy, setSortBy] = useState('time');
   const [filterDifficulty, setFilterDifficulty] = useState('all');
   
-  // Для колод
   const [deckDialogOpen, setDeckDialogOpen] = useState(false);
   const [editingDeck, setEditingDeck] = useState(null);
   const [deckForm, setDeckForm] = useState({ name: '', description: '' });
   
-  // Для показа описания в заголовке
   const [showDescription, setShowDescription] = useState(false);
   
   const navigate = useNavigate();
@@ -263,7 +261,6 @@ export default function DeckView() {
             <>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
                 <Box sx={{ flex: 1 }}>
-                  {/* Название и треугольник */}
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <Typography variant="h3">{selectedDeck.name}</Typography>
                     {selectedDeck.description && (
@@ -282,7 +279,6 @@ export default function DeckView() {
                   
                   <Typography variant="body1" color="text.secondary">{filteredCards.length} of {cards.length} words</Typography>
                   
-                  {/* Всплывающее описание */}
                   {selectedDeck.description && (
                     <Collapse in={showDescription}>
                       <Typography 
@@ -311,7 +307,6 @@ export default function DeckView() {
                 </Box>
               </Box>
 
-              {/* Filters */}
               {cards.length > 0 && (
                 <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
                   <TextField
@@ -376,7 +371,6 @@ export default function DeckView() {
         </Box>
       </Box>
 
-      {/* Card Dialog */}
       <Dialog open={dialogOpen} onClose={closeDialog} maxWidth="sm" fullWidth>
         <DialogTitle>{editingCard ? 'Edit Card' : 'Add Card'}</DialogTitle>
         <DialogContent>
@@ -411,7 +405,6 @@ export default function DeckView() {
         </DialogActions>
       </Dialog>
 
-      {/* Deck Dialog */}
       <Dialog open={deckDialogOpen} onClose={closeDeckDialog} maxWidth="sm" fullWidth>
         <DialogTitle>{editingDeck ? 'Edit Deck' : 'Create New Deck'}</DialogTitle>
         <DialogContent>
